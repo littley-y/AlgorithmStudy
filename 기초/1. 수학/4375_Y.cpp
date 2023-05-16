@@ -2,12 +2,12 @@
 
 using namespace std;
 
-unsigned short n;
+unsigned short mod;
 
-int getAnswer(unsigned long long num, unsigned long long next, int cnt) {
-  if (num % n == 0)
+int getAnswer(int num, int cnt) {
+  if (num % mod == 0)
     return cnt;
-  return getAnswer(num + next, next * 10, ++cnt);
+  return getAnswer((num * 10 + 1) % mod, cnt + 1);
 }
 
 int main() {
@@ -15,7 +15,8 @@ int main() {
   cin.tie(0);
   cout.tie(0);
 
-  while (cin >> n)
-    cout << getAnswer(1, 10, 1) << '\n';
+  while (cin >> mod) {
+    cout << getAnswer(1, 1) << '\n';
+  }
   return 0;
 }
