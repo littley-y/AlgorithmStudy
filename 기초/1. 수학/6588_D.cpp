@@ -21,19 +21,30 @@ void	getPrime(void)
 	}
 }
 
+bool	isPrime(int num)
+{
+	for (int index = 0; Prime[index] <= num; index++)
+	{
+		if (Prime[index] == num)
+			return (true);
+	}
+	return (false);
+}
+
 void	checkGoldBach(void)
 {
+	int second;
+
 	for (int index = 0; Prime[index] < input; index++)
 	{
-		for (int tmp = index + 1; Prime[tmp] < input; tmp++)
+		second = input - Prime[index];
+		if (isPrime(second))
 		{
-			if (input - Prime[index] - Prime[tmp] == 0)
-			{
-				cout << input << " = " << Prime[index] << " + " << Prime[tmp] << "\n";
-				return ;
-			}
+			cout << input << " = " << Prime[index] << " + " << second << "\n";
+			return ;
 		}
 	}
+	cout << "Goldbach's conjecture is wrong." << "\n";
 }
 
 int main(void)
