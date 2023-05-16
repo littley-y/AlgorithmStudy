@@ -1,50 +1,27 @@
 #include <iostream>
 
-long long	check_result(long long result)
+using namespace std;
+
+int main(void)
 {
-	long long ret = 0;
-	while (true)
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+
+	int n, value, cnt;
+
+	while (cin >> n)
 	{
-		if (result == 1)
+		value = 1;
+		cnt = 1;
+		while (true)
 		{
-			ret++;
-			break ;
+			if (value % n == 0)
+				break ;
+
+			value = (value * 10 + 1) % n;
+			cnt++;
 		}
-
-		if (result % 10 != 1)
-		{
-			ret = -1;
-			break ;
-		}
-		result /= 10;
-		ret++;
-	}
-
-	return (ret);
-}
-
-int main()
-{
-	long long	n;
-
-	std::cin >> n;
-
-	if (n < 1 || n > 10000 || n % 2 == 0 || n % 5 == 0)
-		return (1);
-
-	long long result = n;
-	long long ret;
-
-	while (true)
-	{
-		ret = check_result(result);
-		if (ret != -1)
-		{
-			std::cout << ret << std::endl;
-			break ;
-		}
-		else
-		result += n;
+		cout << cnt << "\n";
 	}
 	return (0);
 }
