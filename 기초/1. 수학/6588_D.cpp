@@ -23,11 +23,8 @@ void	getPrime(void)
 
 bool	isPrime(int num)
 {
-	for (int index = 0; Prime[index] <= num; index++)
-	{
-		if (Prime[index] == num)
-			return (true);
-	}
+	if (all[num] == num)
+		return (true);
 	return (false);
 }
 
