@@ -1,42 +1,30 @@
 #include <iostream>
 
-int f(int A)
+using namespace std;
+
+long long fg(long long A)
 {
-	int index = 1, ret = 0;
+	long long index = 1, ret = 0;
 
 	while (A != index)
 	{
-		if (A % index == 0)
-			ret += index;
+		ret += index * (A / index);
 		index++;
 	}
-	ret += index;
-
-	return (ret);
-}
-
-int g(int x)
-{
-	int ret = 0;
-
-	while (x)
-	{
-		ret += f(x);
-		x--;
-	}
+	ret += index * (A / index);
 
 	return (ret);
 }
 
 int main()
 {
-	int	N;
+	ios::sync_with_stdio(0);
+	cin.tie(0);
 
-	std::cin >> N;
+	long long	N;
 
-	if (N < 1 || N > 1000000)
-		return (1);
+	cin >> N;
 
-	std::cout << g(N) << std::endl;
+	cout << fg(N) << endl;
 	return (0);
 }
