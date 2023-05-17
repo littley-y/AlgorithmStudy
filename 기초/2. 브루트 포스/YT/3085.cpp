@@ -11,12 +11,11 @@ void checkBoardGaro(vector<string> check) {
   for (int i = 0; i < N; i++) {
     for (int j = 0; j + 1 < N; j++) {
       if (isalpha(check[i][j])) {
-        int a = i, b = j;
         int cnt = 1;
-        while (b + 1 < N && check[a][b] == check[a][b + 1]) {
-          check[a][b] = 1;
+        while (j + 1 < N && check[i][j] == check[i][j + 1]) {
+          check[i][j] = 1;
           cnt++;
-          b++;
+          j++;
         }
         if (cnt > maxSnack)
           maxSnack = cnt;
@@ -29,12 +28,11 @@ void checkBoardSero(vector<string> check) {
   for (int i = 0; i < N; i++) {
     for (int j = 0; j + 1 < N; j++) {
       if (isalpha(check[j][i])) {
-        int a = i, b = j;
         int cnt = 1;
-        while (b + 1 < N && check[b][a] == check[b + 1][a]) {
-          check[b][a] = 1;
+        while (j + 1 < N && check[j][i] == check[j + 1][i]) {
+          check[j][i] = 1;
           cnt++;
-          b++;
+          j++;
         }
         if (cnt > maxSnack)
           maxSnack = cnt;
@@ -43,11 +41,13 @@ void checkBoardSero(vector<string> check) {
   }
 }
 
+// 전부 돌면서 체크하고, 체크 끝나면 다시 보드 되돌려놓기
 void Bomboni() {
+  char tmp;
   for (int i = 0; i < N; i++) {
     for (int j = 0; j + 1 < N; j++) {
       if (board[i][j] != board[i][j + 1]) {
-        char tmp = board[i][j];
+        tmp = board[i][j];
         board[i][j] = board[i][j + 1];
         board[i][j + 1] = tmp;
         checkBoardGaro(board);
@@ -56,13 +56,8 @@ void Bomboni() {
         board[i][j] = board[i][j + 1];
         board[i][j + 1] = tmp;
       }
-    }
-  }
-
-  for (int i = 0; i < N; i++) {
-    for (int j = 0; j + 1 < N; j++) {
       if (board[j][i] != board[j + 1][i]) {
-        char tmp = board[j][i];
+        tmp = board[j][i];
         board[j][i] = board[j + 1][i];
         board[j + 1][i] = tmp;
         checkBoardGaro(board);
