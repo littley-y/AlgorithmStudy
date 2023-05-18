@@ -5,7 +5,6 @@
 using namespace std;
 
 int N, M;
-int near = 10000000;
 string broken;
 
 int calCnt(int num) {
@@ -19,8 +18,9 @@ int calCnt(int num) {
   return cnt;
 }
 
-void findNear() {
-  int maxNum = pow(10, calCnt(N));
+int findNear() {
+  int maxNum = pow(10, calCnt(N) + 1);  // 여기서 calCnt(N) + 1 안해서 틀림..
+  int click = abs(N - 100);
 
   for (int i = 0; i <= maxNum; i++) {
     string tmp = to_string(i);
@@ -31,9 +31,11 @@ void findNear() {
     }
     if (j != tmp.size())
       continue;
-    if (abs(N - i) < abs(N - near))
-      near = i;
+    int now_click = abs(N - i) + calCnt(i);
+    if (now_click < click)
+      click = now_click;
   }
+  return click;
 }
 
 int main() {
@@ -53,9 +55,6 @@ int main() {
     return 0;
   }
 
-  findNear();
-  int cal = abs(near - N) + calCnt(near);
-
-  cout << (ngd < cal ? ngd : cal) << '\n';
+  cout << findNear() << '\n';
   return 0;
 }
