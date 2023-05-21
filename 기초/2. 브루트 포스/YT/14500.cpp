@@ -1,120 +1,60 @@
+/*
+맨 처음에 완전탐색으로 풀려고 했는데 오류나서, DFS로 푸는 풀이를 참고했다.
+
+1. x, y가 가운데일때를 기준으로, x +- 3, y +-3 좌표까지 모두 탐색하면 된다.
+2. 방문한 노드를 표시하기 위해 visited를 true로 바꾼다.
+   이렇게 하지 않으면 x, y + 1에서 탐색할 때 다시 이전 노드를 탐색하게 된다.
+3. 재귀가 끝나면, 다음번 탐색할 때를 위해 visited를 false로 바꾼다(백트래킹).
+*/
+
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-int N, M;
-int arr[20];
-vector<vector<int>> paper;
+int N, M, biggest;
+int paper[501][501];
+bool visited[501][501];
+int dx[] = {-1, 0, 0, 1};
+int dy[] = {0, -1, 1, 0};
 
-int aa(int x, int y) {
-  if (x + 3 >= M)
-    return -1;
-  else
-    return paper[y][x] + paper[y][x + 1] + paper[y][x + 2] + paper[y][x + 3];
+bool isValid(int x, int y) {
+  if (x < 0 || y < 0 || x > M || y > N || visited[y][x] == true)
+    return false;
+  return true;
 }
 
-int ba(int x, int y) {
-  if (x + 1 >= M || y + 1 >= N)
-    return -1;
-  else
-    return paper[y][x] + paper[y][x + 1] + paper[y + 1][x] +
-           paper[y + 1][x + 1];
-}
+void DFS(int x, int y, int cnt, int curr) {
+  if (cnt == 4) {
+    if (curr > biggest) {
+      biggest = curr;
+    }
+    return;
+  }
 
-int ca(int x, int y) {
-  if (x + 1 >= M || y + 2 >= N)
-    return -1;
-  else
-    return paper[y][x] + paper[y + 1][x] + paper[y + 2][x] +
-           paper[y + 2][x + 1];
-}
-
-int cb(int x, int y) {
-  if (x + 2 >= M || y + 1 >= N)
-    return -1;
-  else
-    return paper[y][x] + paper[y][x + 1] + paper[y][x + 2] + paper[y + 1][x];
-}
-
-int cc(int x, int y) {
-  if (x + 1 >= M || y + 2 >= N)
-    return -1;
-  else
-    return paper[y][x] + paper[y][x + 1] + paper[y + 1][x + 1] +
-           paper[y + 2][x + 1];
-}
-
-int cd(int x, int y) {
-  if (x + 2 >= M || y + 1 >= N)
-    return -1;
-  else
-    return paper[y][x + 2] + paper[y + 1][x] + paper[y + 1][x + 1] +
-           paper[y + 1][x + 2];
-}
-
-int da(int x, int y) {
-  if (x + 1 >= M || y + 2 >= N)
-    return -1;
-  else
-    return paper[y][x] + paper[y + 1][x] + paper[y + 1][x + 1] +
-           paper[y + 2][x + 1];
-}
-
-int db(int x, int y) {
-  if (x + 1 >= M || y + 2 >= N)
-    return -1;
-  else
-    return paper[y][x + 1] + paper[y + 1][x] + paper[y + 1][x + 1] +
-           paper[y + 2][x];
-}
-
-int ea(int x, int y) {
-  if (x + 2 >= M || y + 1 >= N)
-    return -1;
-  else
-    return paper[y][x] + paper[y][x + 1] + paper[y][x + 2] +
-           paper[y + 1][x + 1];
-}
-
-int eb(int x, int y) {
-  if (x + 2 >= M || y + 1 >= N)
-    return -1;
-  else
-    return paper[y][x + 1] + paper[y + 1][x] + paper[y + 1][x + 1] +
-           paper[y + 1][x + 2];
-}
-
-void checkTetromino(int x, int y) {
-  arr[0] = aa(x, y);
-  arr[1] = aa(y, x);
-  arr[2] = ba(x, y);
-  arr[3] = ca(x, y);
-  arr[4] = ca(y, x);
-  arr[5] = cb(x, y);
-  arr[6] = cb(y, x);
-  arr[7] = cc(x, y);
-  arr[8] = cc(y, x);
-  arr[9] = cd(x, y);
-  arr[10] = cd(y, x);
-  arr[11] = da(x, y);
-  arr[12] = da(y, x);
-  arr[13] = db(x, y);
-  arr[14] = db(y, x);
-  arr[15] = ea(x, y);
-  arr[16] = ea(y, x);
-  arr[17] = eb(x, y);
-  arr[18] = eb(y, x);
-}
-
-void sortArr() {
-  for (int i = 0; i < 19; i++) {
-    for (int j = i + 1; j < 19; j++) {
-      if (arr[i] > arr[j]) {
-        int tmp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = tmp;
-      }
+  for (int i = 0; i < 4; i++) {
+    int nx = x + dx[i];
+    int ny = y + dy[i];
+    if (isValid(nx, ny)) {
+      visited[y][x] = true;
+      DFS(nx, ny, cnt + 1, curr + paper[y][x]);
+      visited[y][x] = false;
+    }
+    if (x > 0 && y > 0 && x + 1 < M) {
+      biggest = max(biggest, paper[y][x] + paper[y][x - 1] + paper[y - 1][x] +
+                                 paper[y][x + 1]);
+    }
+    if (x > 0 && y > 0 && y + 1 < N) {
+      biggest = max(biggest, paper[y][x] + paper[y][x - 1] + paper[y - 1][x] +
+                                 paper[y + 1][x]);
+    }
+    if (x > 0 && y + 1 < N && x + 1 < M) {
+      biggest = max(biggest, paper[y][x] + paper[y][x - 1] + paper[y + 1][x] +
+                                 paper[y][x + 1]);
+    }
+    if (x + 1 < M && y > 0 && y + 1 < N) {
+      biggest = max(biggest, paper[y][x] + paper[y][x + 1] + paper[y - 1][x] +
+                                 paper[y + 1][x]);
     }
   }
 }
@@ -125,23 +65,19 @@ int main() {
 
   cin >> N >> M;
 
-  paper.resize(N);
   for (int i = 0; i < N; i++) {
-    paper[i].resize(M);
     for (int j = 0; j < M; j++) {
       cin >> paper[i][j];
     }
   }
 
-  int sum = 0;
   for (int i = 0; i < N; i++) {
     for (int j = 0; j < M; j++) {
-      checkTetromino(j, i);
-      sortArr();
-      if (sum < arr[18])
-        sum = arr[18];
+      DFS(j, i, 0, 0);
     }
   }
-  cout << sum << "\n";
+
+  cout << biggest << "\n";
+
   return 0;
 }
