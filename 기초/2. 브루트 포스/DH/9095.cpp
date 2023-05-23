@@ -1,71 +1,73 @@
+
+// 다이나믹 프로그래밍
 #include <iostream>
 
 using namespace std;
 
-int	test_case, n, arr[12], sum_case = 0;
+int	test_case, n, arr[11];
 
-void	setArr(void)
+int main(void)
 {
-	for (int index = 0; index < n; index++)
-		arr[index] = 1;
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+	arr[0] = 0;
+	arr[1] = 1;
+	arr[2] = 2;
+	arr[3] = 4;
+	for (int arr_index = 4; arr_index < 11; arr_index++)
+		arr[arr_index] = arr[arr_index - 1] + arr[arr_index - 2] + arr[arr_index - 3];
+
+	cin >> test_case;
+
+	while(test_case)
+	{
+		cin >> n;
+		cout << arr[n] << '\n';
+		test_case--;
+	}
+
+	return (0);
 }
 
-int sum(void)
+// 백트래킹
+#include <iostream>
+
+using namespace std;
+
+int	test_case, n, sum_case, arr[10];
+
+int	sumAll(void)
 {
 	int sum = 0;
 
-	for (int index = 0; arr[index]; index++)
-		sum += arr[index];
-
+	for (int arr_index = 0; arr[arr_index]; arr_index++)
+		sum += arr[arr_index];
 	return (sum);
 }
 
-bool checkAllSame(void)
+void	backtracking(int curr)
 {
-	int tmp = arr[0];
-	for (int index = 0; arr[index]; index++)
+	if (sumAll() == n)
 	{
-		if (tmp != arr[index])
-			return(false);
+		sum_case++;
+		return ;
 	}
-	return (true);
-}
 
-int size(void)
-{
-	int size = 0;
-
-	for (int index = 0; arr[index]; index++)
-		size++;
-
-	return (size);
-}
-
-void	calculate(void)
-{
-	setArr();
-	sum_case = 0;
-	while (size() != 1)
+	for (int num = 1; num <= 3; num++)
 	{
-		if (sum() == n)
+		arr[curr] = num;
+		if (sumAll() <= n)
 		{
-			if (checkAllSame())
-				sum_case++;
-			else
-				sum_case += size();
+			backtracking(curr + 1);
+			arr[curr] = 0;
 		}
-
-		for (int i = 0; arr[i]; i++)
-			cout << arr[i] << " ";
-		cout << '\n';
-
-		arr[size() - 1] = 0;
-		if (size())
-			arr[0]++;
+		else
+		{
+			arr[curr] = 0;
+			return ;
+		}
 	}
-	if (n == 1)
-		sum_case = 1;
-	cout << sum_case << '\n';
 }
 
 int main(void)
@@ -73,14 +75,14 @@ int main(void)
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 
-
 	cin >> test_case;
 
 	while(test_case)
 	{
 		cin >> n;
-		bzero(arr, 12);
-		calculate();
+		sum_case = 0;
+		backtracking(0);
+		cout << sum_case << '\n';
 		test_case--;
 	}
 
