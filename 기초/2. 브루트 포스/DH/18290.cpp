@@ -57,7 +57,10 @@ void	backtracking(int y, int x)
 			sum += basic_board[height][width];
 			selected++;
 
-			backtracking(y, x);
+			if (x + 1 < M)
+				backtracking(y, x + 1);
+			else
+				backtracking(y + 1, 0);
 
 			sum -= basic_board[height][width];
 			selected_board[height][width] = false;
