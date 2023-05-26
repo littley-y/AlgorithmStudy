@@ -51,8 +51,8 @@ void solution(int curr, int x, int y) {
       }
       visited[i][j] = true;
       ans[curr] = make_pair(j, i);
-      if (x < M)
-        solution(curr + 1, x + 2, y);
+      if (x + 1 < M)
+        solution(curr + 1, x + 1, y);
       else
         solution(curr + 1, 0, y + 1);
       visited[i][j] = false;
