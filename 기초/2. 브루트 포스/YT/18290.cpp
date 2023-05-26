@@ -1,62 +1,55 @@
+/*
+맨 처음에 풀이했을때 틀렸는데 알고보니 N이 세로고 M이 가로여서 그랬다..
+최적화를 해주기 위해서 isValid의 조건을 좀 수정하고,
+좌표를 pair로 기록하는 대신 sum을 더하는 방식으로 바꿨다.
+*/
+
 #include <iostream>
 
 using namespace std;
 
-int N, M, K;
+int N, M, K, sum;
 int maxSum = -40001;
 int board[10][10];
 bool visited[10][10];
 int dx[] = {-1, 0, 0, 1};
 int dy[] = {0, 1, -1, 0};
-pair<int, int> ans[3];
 
-int calSum() {
-  int sum = 0;
-  for (int i = 0; i < K; i++) {
-    sum += board[ans[i].second][ans[i].first];
-  }
-  return sum;
-}
-
-bool promising(int curr, int x, int y) {
+bool isValid(int curr, int x, int y) {
   if (visited[y][x] == true)
     return false;
 
-  for (int i = 0; i < curr; i++) {
-    int cx = ans[i].first;
-    int cy = ans[i].second;
-    for (int j = 0; j < 4; j++) {
-      if (x + dx[j] < 0 || y + dy[j] < 0 || x + dx[j] == N || y + dy[j] == M)
-        continue;
-      if (x + dx[j] == cx && y + dy[j] == cy)
-        return false;
-    }
+  for (int i = 0; i < 4; i++) {
+    int cx = x + dx[i];
+    int cy = y + dy[i];
+    if (cx < 0 || cy < 0 || cx == M || cy == N)
+      continue;
+    if (visited[cy][cx] == true)
+      return false;
   }
   return true;
 }
 
 void solution(int curr, int x, int y) {
   if (curr == K) {
-    int sum = calSum();
     if (sum > maxSum) {
       maxSum = sum;
     }
     return;
   }
 
-  for (int i = y; i < M; i++) {
-    for (int j = x; j < N; j++) {
-      if (promising(curr, j, i) == false) {
+  for (int i = y; i < N; i++) {
+    for (int j = x; j < M; j++) {
+      if (isValid(curr, j, i) == false)
         continue;
-      }
       visited[i][j] = true;
-      ans[curr] = make_pair(j, i);
+      sum += board[i][j];
       if (x + 1 < M)
         solution(curr + 1, x + 1, y);
       else
         solution(curr + 1, 0, y + 1);
       visited[i][j] = false;
-      ans[curr] = make_pair(-1, -1);
+      sum -= board[i][j];
     }
   }
 }
@@ -66,14 +59,10 @@ int main() {
   cin.tie(0);
 
   cin >> N >> M >> K;
-  for (int i = 0; i < M; i++) {
-    for (int j = 0; j < N; j++) {
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < M; j++) {
       cin >> board[i][j];
     }
-  }
-
-  for (int i = 0; i < 3; i++) {
-    ans[i] = make_pair(-1, -1);
   }
 
   solution(0, 0, 0);
