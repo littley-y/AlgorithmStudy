@@ -50,6 +50,8 @@ void solution(int curr) {
       continue;
     start[curr] = i;
     solution(curr + 1);
+    if (curr == 0)
+      return;
   }
 }
 
