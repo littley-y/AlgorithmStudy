@@ -8,7 +8,7 @@ bool		selected[21];
 vector<int> team_start;
 int			team_start_ability = 0, team_link_ability = 0;
 
-int		sumAbility(const vector<int>& vec, bool select)
+int		sumAbility(bool select)
 {
 	int sum = 0;
 
@@ -28,7 +28,7 @@ int		sumAbility(const vector<int>& vec, bool select)
 
 void	calculateTeamStart()
 {
-	team_start_ability = sumAbility(team_start, true);
+	team_start_ability = sumAbility(true);
 }
 
 void	calculateTeamLink()
@@ -42,7 +42,7 @@ void	calculateTeamLink()
 		team_link.push_back(member);
 	}
 
-	team_link_ability = sumAbility(team_link, false);
+	team_link_ability = sumAbility(false);
 }
 
 void	findMin(int member_index)
