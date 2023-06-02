@@ -21,15 +21,13 @@ int arr[10000];
 bool next_permutation() {
   int i = N - 1;
   int j = N - 1;
-  while (i > 0 && arr[i - 1] > arr[i]) {
+  while (i > 0 && arr[i - 1] > arr[i])
     i--;
-  }
 
-  if (i == 0) {
+  if (i == 0)
     return false;
-  };
 
-  while (arr[i - 1] >= arr[j])
+  while (arr[i - 1] > arr[j])
     j--;
   swap(arr[i - 1], arr[j]);
   reverse(arr + i, arr + N);
