@@ -15,15 +15,14 @@ void  find(void)
 	{
 		int sum = 0;
 
-		// 가로 숫자 합 구하기
 		for (int i = 0; i < N; ++i)
 		{
 			for (int j = 0; j < M; ++j)
 			{
-				if (~bitset & (1 << (i * M + j)))
+				if ((bitset & (1 << (i * M + j))) == 0)
 				{
 					int num = 0;
-					while (j < M && ~bitset & (1 << (i * M + j)))
+					while (j < M && (bitset & (1 << (i * M + j))) == 0)
 					{
 						num *= 10;
 						num += board[i][j];
@@ -34,15 +33,14 @@ void  find(void)
 			}
 		}
 
-		// 세로 숫자 합 구하기
 		for (int j = 0; j < M; ++j)
 		{
 			for (int i = 0; i < N; ++i)
 			{
-				if (bitset & (1 << (i * M + j)))
+				if ((bitset & (1 << (i * M + j))) != 0)
 				{
 					int num = 0;
-					while (i < N && bitset & (1 << (i * M + j)))
+					while (i < N && (bitset & (1 << (i * M + j))) != 0)
 					{
 						num *= 10;
 						num += board[i][j];
