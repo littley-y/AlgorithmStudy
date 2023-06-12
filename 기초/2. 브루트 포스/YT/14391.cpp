@@ -2,28 +2,50 @@
 
 using namespace std;
 
-int N, M, maxSum;
-int paper[4][4];
-bool visited[4][4];
+int N, M;
+int Map[5][5];
+bool visited[5][5];
+int ans;
 
-int calPaper(int n, int m) {
-  int sum = 0;
-  for (int i = 0; i < n; i++) {
-    int num = 0;
-    for (int j = 0; j < m; j++) {
-      num *= 10;
-      num += paper[i][j];
+void dfs(int r, int c) {
+  if (r == 4) {
+    int sum = 0;
+    for (int r = 0; r < N; r++) {
+      int temp = 0;
+      for (int c = 0; c < M; c++) {
+        if (visited[r][c])
+          temp = temp * 10 + Map[r][c];
+        else {
+          sum += temp;
+          temp = 0;
+        }
+      }
+      sum += temp;
     }
-    sum += num;
+    for (int c = 0; c < M; c++) {
+      int temp = 0;
+      for (int r = 0; r < N; r++) {
+        if (!visited[r][c])
+          temp = temp * 10 + Map[r][c];
+        else {
+          sum += temp;
+          temp = 0;
+        }
+      }
+      sum += temp;
+    }
+    ans = max(ans, sum);
+    return;
   }
-  return sum;
-}
+  if (c == 4) {
+    dfs(r + 1, 0);
+    return;
+  }
+  visited[r][c] = true;
+  dfs(r, c + 1);
 
-int solution1() {
-  int line1 = N < M ? N : M;
-  int line2 = N > M ? N : M;
-
-  return calPaper(line1, line2);
+  visited[r][c] = false;
+  dfs(r, c + 1);
 }
 
 int main() {
@@ -31,17 +53,15 @@ int main() {
   cin.tie(0);
 
   cin >> N >> M;
-  for (int i = 0; i < N; i++) {
-    for (int j = 0; j < M; j++) {
-      cin >> paper[i][j];
-    }
+  string str;
+  for (int r = 0; r < N; r++) {
+    cin >> str;
+    for (int c = 0; c < M; c++)
+      Map[r][c] = str[c] - '0';
   }
 
-  if (N != M)
-    cout << solution1();
-  else if (N == M)
-    cout << max(calPaper(N, M), calPaper(M, N));
-  cout << '\n';
+  dfs(0, 0);
+  cout << ans << "\n";
 
   return 0;
 }
