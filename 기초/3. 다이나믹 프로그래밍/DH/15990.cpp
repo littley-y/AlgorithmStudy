@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int T, dp[100001][4];
+long long T, dp[100001][4];
 
 int main(void)
 {
@@ -27,7 +27,7 @@ int main(void)
   while (T--)
   {
     cin >> tmp;
-    cout << (dp[tmp][1] + dp[tmp][2] + dp[tmp][3]) % 1000000009 << '\n';
+    cout << (long long)(dp[tmp][1] + dp[tmp][2] + dp[tmp][3]) % 1000000009 << '\n';
   }
 
   return (0);
